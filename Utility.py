@@ -1,4 +1,6 @@
 import difflib
+from functools import reduce
+from typing import List
 
 
 def genDiff(before: str, after: str) -> str:
@@ -18,3 +20,7 @@ def genDiff(before: str, after: str) -> str:
     return ''.join(diff)
 
 
+def genSubHuntingMap(huntingRange: List[List[str]]):
+    return "{{HuntingRange/Alternative\n |" + reduce(lambda x, y: x + "|\n |" + y,
+                                                     map(lambda row: reduce(lambda x, y: x + "|" + y, row),
+                                                         huntingRange)) + "|\n}}"
