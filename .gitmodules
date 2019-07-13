@@ -1,0 +1,3 @@
+[submodule "AL_Config_Parser"]
+	path = AL_Config_Parser
+	url = https://github.com/ALPachurii/AL_Config_Parser
