@@ -5,7 +5,7 @@ import mwparserfromhell
 import requests
 import re
 from typing import *
-from Utility import genDiff
+from Utility import *
 from pywikibot import pagegenerators
 from AL_Config_Parser.src.main.ConfigParser import ConfigParser
 
@@ -29,12 +29,13 @@ def main():
     alwiki = pywikibot.Site()
     ships = pywikibot.Category(alwiki, "Ships")
     unreleasedShips = pywikibot.Category(alwiki, "Unreleased ships")
+    submarines = pywikibot.Category(alwiki, "Submarines")
 
     for ship in pagegenerators.CategorizedPageGenerator(ships):
         parsed = mwparserfromhell.parse(preProcess(ship.text))
         cats = list(ship.categories())
         for template in parsed.filter_templates():
-            if template.name.matches("Ship") and unreleasedShips not in cats:
+            if template.name.matches("Ship") and unreleasedShips not in cats and submarines in cats:
                 pageName = ship.title()
 
                 def changeVal(key: str, value: Union[str, int]):
@@ -149,6 +150,9 @@ def main():
                         changeVal("OxygenInitial", metaShip.getOxygen(0))
                         changeVal("OxygenMax", metaShip.getOxygen(3))
                         changeVal("Oxygen120", metaShip.getOxygen(3))
+                        changeVal("RangeInitial", genSubHuntingMap(metaShip.getHuntingRange(0)))
+                        changeVal("RangeMax", genSubHuntingMap(metaShip.getHuntingRange(0)))
+                        changeVal("Range120", genSubHuntingMap(metaShip.getHuntingRange(0)))
 
                 def changeEquipProficiency():
                     def getProficiencyString(slotId: int, lbLevel: int, countRefit: bool) -> str:
